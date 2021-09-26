@@ -1,4 +1,6 @@
 // Convert time to a format of hours, minutes, seconds, and milliseconds
+// jadi record itu yang waktunya itu nambah terus
+// ada print lap, itu nampilin display. dan di display itu nampilin record
 
 function timeToString(time) {
     let diffInHrs = time / 3600000;
@@ -13,12 +15,11 @@ function timeToString(time) {
     let diffInMs = (diffInSec - ss) * 100;
     let ms = Math.floor(diffInMs);
 
-    let formattedHH = hh.toString().padStart(2, "0");
     let formattedMM = mm.toString().padStart(2, "0");
     let formattedSS = ss.toString().padStart(2, "0");
     let formattedMS = ms.toString().padStart(2, "0");
 
-    return `${formattedHH}:${formattedMM}:${formattedSS}:${formattedMS}`;
+    return `${formattedMM}:${formattedSS}:${formattedMS}`;
 }
 
 // Declare variables to use in our functions below
@@ -31,7 +32,7 @@ let counter = 1;
 // Create function to modify innerHTML
 
 function print(txt) {
-    document.getElementById("timer").innerHTML = txt;
+    document.getElementById("display").innerHTML = txt;
 }
 
 function printHeaderLap() {
@@ -52,6 +53,8 @@ function start() {
     timerInterval = setInterval(function printTime() {
         elapsedTime = Date.now() - startTime;
         print(timeToString(elapsedTime));
+        localStorage.setItem("time", elapsedTime);
+        console.log(elapsedTime)
     }, 10);
     showButton("PAUSE");
 }
@@ -62,33 +65,46 @@ function pause() {
 }
 
 function reset() {
-    printLap(counter + " " + document.getElementById("timer").innerHTML);
+    printLap(counter + " " + document.getElementById("display").innerHTML);
     clearInterval(timerInterval);
     print("00:00:00");
     elapsedTime = 0;
+    localStorage.setItem("time", 0);
     showButton("PLAY");
 }
 
 function lap() {
-    lap = counter + " " + document.getElementById("timer").innerHTML + "<br>";
+    lap = counter + " " + document.getElementById("display").innerHTML + "<br>";
     printLap(lap);
     counter += 1;
 }
+
+// Create function save timer when close browser
+window.onbeforeunload = load();
+
+function load() {
+    elapsedTime = localStorage.getItem("time");
+    print(timeToString(elapsedTime));
+}
+
+// window.onbeforeunload = function() {
+//     alert("Goodbye");
+// };
 
 // Create function to display buttons
 
 function showButton(buttonKey) {
     const buttonToShow = buttonKey === "PLAY" ? playButton : pauseButton;
     const buttonToHide = buttonKey === "PLAY" ? pauseButton : playButton;
-    buttonToShow.style.display = "inline-block";
+    buttonToShow.style.display = "block";
     buttonToHide.style.display = "none";
 }
 // Create event listeners
 
-let playButton = document.getElementById("start-btn");
-let pauseButton = document.getElementById("pause-btn");
-let resetButton = document.getElementById("stop-btn");
-let lapButton = document.getElementById("lap-btn");
+let playButton = document.getElementById("playButton");
+let pauseButton = document.getElementById("pauseButton");
+let resetButton = document.getElementById("resetButton");
+let lapButton = document.getElementById("lapButton");
 
 playButton.addEventListener("click", start);
 pauseButton.addEventListener("click", pause);
