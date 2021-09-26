@@ -77,6 +77,10 @@ body {
     display: none;
 }
 
+#lap-btn {
+    display: none;
+}
+
 #record {
     line-height: 2.15em;
     font-size: 28px;
