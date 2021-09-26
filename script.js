@@ -13,12 +13,11 @@ function timeToString(time) {
     let diffInMs = (diffInSec - ss) * 100;
     let ms = Math.floor(diffInMs);
 
-    let formattedHH = hh.toString().padStart(2, "0");
     let formattedMM = mm.toString().padStart(2, "0");
     let formattedSS = ss.toString().padStart(2, "0");
     let formattedMS = ms.toString().padStart(2, "0");
 
-    return `${formattedHH}:${formattedMM}:${formattedSS}:${formattedMS}`;
+    return `${formattedMM}:${formattedSS}:${formattedMS}`;
 }
 
 // Declare variables to use in our functions below
@@ -31,12 +30,12 @@ let counter = 1;
 // Create function to modify innerHTML
 
 function print(txt) {
-    document.getElementById("timer").innerHTML = txt;
+    document.getElementById("display").innerHTML = txt;
 }
 
 function printHeaderLap() {
     counter = 1;
-    header = "Lap Time <br>";
+    header = "Lap Time<br>";
     document.getElementById("record").innerHTML = header;
 }
 
@@ -47,7 +46,6 @@ function printLap(txt) {
 // Create "start", "pause" and "reset" functions
 
 function start() {
-    printHeaderLap();
     startTime = Date.now() - elapsedTime;
     timerInterval = setInterval(function printTime() {
         elapsedTime = Date.now() - startTime;
@@ -62,7 +60,7 @@ function pause() {
 }
 
 function reset() {
-    printLap(counter + " " + document.getElementById("timer").innerHTML);
+    printLap(counter + " " + document.getElementById("display").innerHTML);
     clearInterval(timerInterval);
     print("00:00:00");
     elapsedTime = 0;
@@ -70,7 +68,7 @@ function reset() {
 }
 
 function lap() {
-    lap = counter + " " + document.getElementById("timer").innerHTML + "<br>";
+    lap = counter + " " + document.getElementById("display").innerHTML + "<br>";
     printLap(lap);
     counter += 1;
 }
@@ -78,19 +76,28 @@ function lap() {
 // Create function to display buttons
 
 function showButton(buttonKey) {
-    const buttonToShow = buttonKey === "PLAY" ? playButton : pauseButton;
-    const buttonToHide = buttonKey === "PLAY" ? pauseButton : playButton;
-    buttonToShow.style.display = "inline-block";
-    buttonToHide.style.display = "none";
+    const buttonToShow1 = buttonKey === "PLAY" ? playButton : pauseButton;
+    const buttonToShow2 = buttonKey === "PLAY" ? playButton : lapButton;
+    const buttonToHide1 = buttonKey === "PLAY" ? pauseButton : playButton;
+    const buttonToHide2 = buttonKey === "PLAY" ? lapButton : playButton;
+    buttonToShow1.style.display = "block";
+    buttonToShow2.style.display = "block";
+    buttonToHide1.style.display = "none";
+    buttonToHide2.style.display = "none";
 }
 // Create event listeners
 
-let playButton = document.getElementById("start-btn");
-let pauseButton = document.getElementById("pause-btn");
-let resetButton = document.getElementById("stop-btn");
-let lapButton = document.getElementById("lap-btn");
+let playButton = document.getElementById("playButton");
+let pauseButton = document.getElementById("pauseButton");
+let resetButton = document.getElementById("resetButton");
+let lapButton = document.getElementById("lapButton");
 
 playButton.addEventListener("click", start);
 pauseButton.addEventListener("click", pause);
 resetButton.addEventListener("click", reset);
 lapButton.addEventListener("click", lap);
+
+window.onbeforeunload = function(){
+    var msg = "Yakin mau keluar dari halaman ini?";
+    return msg;
+}
