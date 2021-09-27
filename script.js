@@ -78,6 +78,7 @@ function start() {
     timerInterval = setInterval(function printTime() {
         elapsedTime = Date.now() - startTime;
         print(timeToString(elapsedTime));
+        localStorage.setItem("time", elapsedTime);
     }, 10);
     showButton("PAUSE");
 }
@@ -97,6 +98,7 @@ function reset() {
     clearInterval(timerInterval);
     print("00:00:00:00");
     elapsedTime = 0;
+    localStorage.setItem("time", 0);
     showButton("PLAY");
 }
 
@@ -117,6 +119,13 @@ function showButton(buttonKey) {
     lapButton.disabled = buttonKey === "PLAY" ? true : false;
 }
 // Create event listeners
+
+function load() {
+    elapsedTime = localStorage.getItem("time");
+    print(timeToString(elapsedTime));
+}
+
+window.onbeforeunload = load();
 
 let playButton = document.getElementById("start-btn");
 let pauseButton = document.getElementById("pause-btn");
