@@ -20,6 +20,49 @@ class Timer extends HTMLElement {
         this.counter = 1;
         this.prevLap;
         this.state = "paused";
+
+        console.log(localStorage.getItem("saveData"));
+
+        window.addEventListener("beforeunload", (event) => this.save(event));
+        this.load();
+    }
+
+    save(event) {
+        event.preventDefault();
+
+        localStorage.setItem("saveData", JSON.stringify({
+            state: this.state,
+            savedTime: this.elapsedTime,
+            record: this.recordText.innerHTML,
+            timeClosed: Date.now()
+        }));
+
+        return;
+    }
+
+    load() {
+        const loadData = JSON.parse(localStorage.getItem("saveData"));
+        if(loadData === null) return;
+
+        this.elapsedTime = loadData.savedTime;
+        
+        switch(loadData.state) {
+            case "started":
+                this.elapsedTime += (Date.now() - loadData.timeClosed);
+                this.timerText.innerHTML = this.timeToString(this.elapsedTime);
+                this.recordText.innerHTML = loadData.record;
+                this.start();
+                break
+            case "paused":
+                this.timerText.innerHTML = this.timeToString(this.elapsedTime);
+                this.recordText.innerHTML = loadData.record;
+                this.pause();
+                break
+            case "stopped":
+                this.timerText.innerHTML = this.timeToString(this.elapsedTime);
+                this.recordText.innerHTML = "Time <br/>";
+                break
+        }
     }
 
     timeToString(time) {
@@ -69,9 +112,6 @@ class Timer extends HTMLElement {
 
     start() {
         this.startTime = Date.now() - this.elapsedTime
-        if(this.counter === 1) {
-            this.recordText.innerHTML = "Time <br/>"
-        }
         this.timerInterval = setInterval(() => {
             this.elapsedTime = Date.now() - this.startTime;
             this.timerText.innerHTML = this.timeToString(this.elapsedTime);
@@ -81,6 +121,7 @@ class Timer extends HTMLElement {
         this.pauseButton.style.display = "inline-block";
         this.playButton.style.display = "none";
         this.lapButton.disabled = false;
+        this.resetButton.disabled = false;
     }
 
     pause() {
@@ -101,10 +142,11 @@ class Timer extends HTMLElement {
         this.timerText.innerHTML = "00:00:00:00";
         this.elapsedTime = 0;
 
-        this.state = "paused";
+        this.state = "stopped";
         this.pauseButton.style.display = "none";
         this.playButton.style.display = "inline-block";
         this.lapButton.disabled = true;
+        this.resetButton.disabled = true;
     }
 
     lap() {
