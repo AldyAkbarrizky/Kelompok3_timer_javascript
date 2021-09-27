@@ -78,7 +78,7 @@ body {
 }
 
 #lap-btn {
-    display: none;
+    display: inline-block;
 }
 
 #record {

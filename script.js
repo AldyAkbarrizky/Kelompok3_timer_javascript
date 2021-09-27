@@ -68,10 +68,10 @@ function pause() {
 function reset() {
     currTime = startTime - elapsedTime;
     lapTime = prevLap - currTime;
-    lap = counter + " " + timeToString(lapTime) + " " + document.getElementById("timer").innerHTML + "<br>";
+    lap = "Final time: " + document.getElementById("timer").innerHTML + "<br>";
     printLap(lap);
     clearInterval(timerInterval);
-    print("00:00:00");
+    print("00:00:00:00");
     elapsedTime = 0;
     showButton("PLAY");
 }
@@ -79,7 +79,7 @@ function reset() {
 function lap() {
     currTime = startTime - elapsedTime;
     lapTime = prevLap - currTime;
-    lap = counter + " " + timeToString(lapTime) + " " + document.getElementById("timer").innerHTML + "<br>";
+    lap = counter + " " + document.getElementById("timer").innerHTML + " (+" + timeToString(lapTime) + ")<br>";
     printLap(lap);
     prevLap = currTime;
     counter += 1;
@@ -90,7 +90,7 @@ function lap() {
 function showButton(buttonKey) {
     playButton.style.display = buttonKey === "PLAY" ? "inline-block" : "none";
     pauseButton.style.display = buttonKey === "PLAY" ? "none" : "inline-block";
-    lapButton.style.display = buttonKey === "PLAY" ? "none" : "inline-block";
+    lapButton.disabled = buttonKey === "PLAY" ? true : false;
 }
 // Create event listeners
 
