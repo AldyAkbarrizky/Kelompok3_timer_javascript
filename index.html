@@ -1,52 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stopwatch</title>
-    <link rel="stylesheet" href="style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;1,300&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-
-  <body>
-    <div class="stopwatch">
-      <h1><span class="gold">GOLD</span> STOPWATCH</h1>
-      <div class="circle">
-        <span class="time" id="display">00:00:00</span>
-      </div>
-
-      <div class="controls">
-        <button class="buttonPlay">
-          <img id="playButton" src="https://res.cloudinary.com/https-tinloof-com/image/upload/v1593360448/blog/time-in-js/play-button_opkxmt.svg" />
-
-          <img id="pauseButton" src="https://res.cloudinary.com/https-tinloof-com/image/upload/v1593360448/blog/time-in-js/pause-button_pinhpy.svg" />
-        </button>
-
-        <button class="buttonReset">
-          <img id="resetButton" src="https://res.cloudinary.com/https-tinloof-com/image/upload/v1593360448/blog/time-in-js/reset-button_mdv6wf.svg" />
-        </button>
-
-        <button class="buttonLap">
-          <img id="lapButton" src="https://res.cloudinary.com/https-tinloof-com/image/upload/v1593360448/blog/time-in-js/reset-button_mdv6wf.svg" />
-        </button>
-
-        <button>
-
-        </button>
-      </div>
-
-      <div class="recordbox">
-        <span class="time" id="record">Lap Time</span>
-      </div>
-
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch Cool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="w-100-v h-100-v">
+        <div class="w-50-cent m-auto text-center">
+            <div id="stopwatch-header" class="my-30">
+                <h1>The Timer God Only Knows</h1>
+            </div>
+            <div id="stopwatch" class="w-50-cent m-auto">
+                <span id="timer">00:00:00:00</span>
+            </div>
+            <div id="button-container" class="my-30">
+                <button id="start-btn" class="btn btn-transparent text-white mx-5">Start</button>
+                <button id="pause-btn" class="btn btn-transparent text-white mx-5">Pause</button>
+                <button id="stop-btn" class="btn btn-transparent text-white mx-5">Stop</button>
+                <button id="lap-btn" class="btn btn-transparent text-white mx-5" disabled>Lap</button>
+            </div>
+            <div class="my-30">
+                <span id="record">Time</span>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
-  </body>
+</body>
 </html>

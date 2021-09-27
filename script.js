@@ -1,6 +1,4 @@
 // Convert time to a format of hours, minutes, seconds, and milliseconds
-// jadi record itu yang waktunya itu nambah terus
-// ada print lap, itu nampilin display. dan di display itu nampilin record
 
 function timeToString(time) {
     let diffInHrs = time / 3600000;
@@ -15,11 +13,12 @@ function timeToString(time) {
     let diffInMs = (diffInSec - ss) * 100;
     let ms = Math.floor(diffInMs);
 
+    let formattedHH = hh.toString().padStart(2, "0");
     let formattedMM = mm.toString().padStart(2, "0");
     let formattedSS = ss.toString().padStart(2, "0");
     let formattedMS = ms.toString().padStart(2, "0");
 
-    return `${formattedMM}:${formattedSS}:${formattedMS}`;
+    return `${formattedHH}:${formattedMM}:${formattedSS}:${formattedMS}`;
 }
 
 // Declare variables to use in our functions below
@@ -28,16 +27,17 @@ let startTime;
 let elapsedTime = 0;
 let timerInterval;
 let counter = 1;
+let prevLap;
 
 // Create function to modify innerHTML
 
 function print(txt) {
-    document.getElementById("display").innerHTML = txt;
+    document.getElementById("timer").innerHTML = txt;
 }
 
 function printHeaderLap() {
-    counter = 1;
-    header = "Lap Time <br>";
+    // counter = 1;
+    header = "Time <br>";
     document.getElementById("record").innerHTML = header;
 }
 
@@ -45,16 +45,40 @@ function printLap(txt) {
     document.getElementById("record").innerHTML += txt;
 }
 
+function printResult(hour, minutes, seconds) {  
+    if (hour != "00") {
+        var hourTime = parseInt(hour);
+        if (hourTime >= 24) {
+            var day = hourTime / 24;
+            hourTime = hourTime - 24;
+            txt = day + " hari " + toString(hourTime) + " jam " + minutes + " menit " + seconds + " detik ";            
+        }
+        else {
+            txt = hour + " jam " + minutes + " menit " + seconds + " detik ";
+        }        
+    }
+    else if (minutes != "00")  {
+        txt = minutes + " menit " + seconds + " detik ";
+    }
+    else if (seconds != "00")  {
+        txt = seconds + " detik ";
+    } else {
+        txt = "0 detik"
+    }
+    return txt
+}
 // Create "start", "pause" and "reset" functions
 
 function start() {
-    printHeaderLap();
     startTime = Date.now() - elapsedTime;
+    if (counter === 1) {
+        printHeaderLap();
+        prevLap = startTime;
+    }
     timerInterval = setInterval(function printTime() {
         elapsedTime = Date.now() - startTime;
         print(timeToString(elapsedTime));
         localStorage.setItem("time", elapsedTime);
-        console.log(elapsedTime)
     }, 10);
     showButton("PAUSE");
 }
@@ -65,46 +89,48 @@ function pause() {
 }
 
 function reset() {
-    printLap(counter + " " + document.getElementById("display").innerHTML);
+    currTime = startTime - elapsedTime;
+    lapTime = prevLap - currTime;
+    str = document.getElementById("timer").innerHTML
+    const timeArr = str.split(":");
+    lap = "Final time: " + printResult(timeArr[0], timeArr[1], timeArr[2]) + "<br>";
+    printLap(lap);
     clearInterval(timerInterval);
-    print("00:00:00");
+    print("00:00:00:00");
     elapsedTime = 0;
     localStorage.setItem("time", 0);
     showButton("PLAY");
 }
 
 function lap() {
-    lap = counter + " " + document.getElementById("display").innerHTML + "<br>";
+    currTime = startTime - elapsedTime;
+    lapTime = prevLap - currTime;
+    lap = counter + " " + document.getElementById("timer").innerHTML + " (+" + timeToString(lapTime) + ")<br>";
     printLap(lap);
+    prevLap = currTime;
     counter += 1;
 }
 
-// Create function save timer when close browser
-window.onbeforeunload = load();
+// Create function to display buttons
+
+function showButton(buttonKey) {
+    playButton.style.display = buttonKey === "PLAY" ? "inline-block" : "none";
+    pauseButton.style.display = buttonKey === "PLAY" ? "none" : "inline-block";
+    lapButton.disabled = buttonKey === "PLAY" ? true : false;
+}
+// Create event listeners
 
 function load() {
     elapsedTime = localStorage.getItem("time");
     print(timeToString(elapsedTime));
 }
 
-// window.onbeforeunload = function() {
-//     alert("Goodbye");
-// };
+window.onbeforeunload = load();
 
-// Create function to display buttons
-
-function showButton(buttonKey) {
-    const buttonToShow = buttonKey === "PLAY" ? playButton : pauseButton;
-    const buttonToHide = buttonKey === "PLAY" ? pauseButton : playButton;
-    buttonToShow.style.display = "block";
-    buttonToHide.style.display = "none";
-}
-// Create event listeners
-
-let playButton = document.getElementById("playButton");
-let pauseButton = document.getElementById("pauseButton");
-let resetButton = document.getElementById("resetButton");
-let lapButton = document.getElementById("lapButton");
+let playButton = document.getElementById("start-btn");
+let pauseButton = document.getElementById("pause-btn");
+let resetButton = document.getElementById("stop-btn");
+let lapButton = document.getElementById("lap-btn");
 
 playButton.addEventListener("click", start);
 pauseButton.addEventListener("click", pause);
