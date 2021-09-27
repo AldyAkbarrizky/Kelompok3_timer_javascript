@@ -9,23 +9,25 @@
 </head>
 <body>
     <div class="w-100-v h-100-v">
-        <div class="w-50-cent m-auto text-center">
-            <div id="stopwatch-header" class="my-30">
-                <h1>The Timer God Only Knows</h1>
+        <the-timer>
+            <div class="w-50-cent m-auto text-center">
+                <div id="stopwatch-header" class="my-30">
+                    <h1>The Timer God Only Knows</h1>
+                </div>
+                <div id="stopwatch" class="w-50-cent m-auto">
+                    <span id="timer">00:00:00:00</span>
+                </div>
+                <div id="button-container" class="my-30">
+                    <button id="start-btn" class="btn btn-transparent text-white mx-5">Start</button>
+                    <button id="pause-btn" class="btn btn-transparent text-white mx-5">Pause</button>
+                    <button id="stop-btn" class="btn btn-transparent text-white mx-5">Stop</button>
+                    <button id="lap-btn" class="btn btn-transparent text-white mx-5" disabled>Lap</button>
+                </div>
+                <div class="my-30">
+                    <span id="record">Time</span>
+                </div>
             </div>
-            <div id="stopwatch" class="w-50-cent m-auto">
-                <span id="timer">00:00:00:00</span>
-            </div>
-            <div id="button-container" class="my-30">
-                <button id="start-btn" class="btn btn-transparent text-white mx-5">Start</button>
-                <button id="pause-btn" class="btn btn-transparent text-white mx-5">Pause</button>
-                <button id="stop-btn" class="btn btn-transparent text-white mx-5">Stop</button>
-                <button id="lap-btn" class="btn btn-transparent text-white mx-5" disabled>Lap</button>
-            </div>
-            <div class="my-30">
-                <span id="record">Time</span>
-            </div>
-        </div>
+        </the-timer>
     </div>
     <script src="script.js"></script>
 </body>
