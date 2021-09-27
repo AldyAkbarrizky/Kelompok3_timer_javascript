@@ -92,7 +92,7 @@ function reset() {
     lapTime = prevLap - currTime;
     str = document.getElementById("timer").innerHTML
     const timeArr = str.split(":");
-    lap = "Final time: " + document.getElementById("timer").innerHTML + "<br>";
+    lap = "Final time: " + printResult(timeArr[0], timeArr[1], timeArr[2]) + "<br>";
     printLap(lap);
     clearInterval(timerInterval);
     print("00:00:00:00");
