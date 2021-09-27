@@ -68,9 +68,26 @@ body {
     border-radius: 50%;
 }
 
+#container {
+    width: 680px; }
+
 #timer {
     font-family: "Roboto Mono", monospace;
     font-size: 48px;
+}
+
+@media screen and (max-width: 680px) {
+    #container {
+        width: 500px;
+    }
+
+    #stopwatch {
+        padding: 100px 0;
+    }
+
+    #timer {
+        font-size: 36px;
+    }
 }
 
 #pause-btn {
