@@ -36,7 +36,7 @@ function print(txt) {
 
 function printHeaderLap() {
     counter = 1;
-    header = "Lap Time <br>";
+    header = "Time <br>";
     document.getElementById("record").innerHTML = header;
 }
 
@@ -44,28 +44,27 @@ function printLap(txt) {
     document.getElementById("record").innerHTML += txt;
 }
 
-function printResult(hour, minutes, seconds, miliseconds) {
+function printResult(hour, minutes, seconds) {  
     if (hour != "00") {
         var hourTime = parseInt(hour);
         if (hourTime >= 24) {
             var day = hourTime / 24;
             hourTime = hourTime - 24;
-            txt = day + " hari " + toString(hourTime) + " jam " + minutes + " menit " + seconds + " detik " + miliseconds + " milidetik";            
+            txt = day + " hari " + toString(hourTime) + " jam " + minutes + " menit " + seconds + " detik ";            
         }
         else {
-            txt = hour + " jam " + minutes + " menit " + seconds + " detik " + miliseconds + " milidetik";
+            txt = hour + " jam " + minutes + " menit " + seconds + " detik ";
         }        
     }
     else if (minutes != "00")  {
-        txt = minutes + " menit " + seconds + " detik " + miliseconds + " milidetik";
+        txt = minutes + " menit " + seconds + " detik ";
     }
     else if (seconds != "00")  {
-        txt = seconds + " detik " + miliseconds + " milidetik";
+        txt = seconds + " detik ";
+    } else {
+        txt = "0 detik"
     }
-    else {
-        txt = miliseconds + " milidetik";
-    }
-    document.getElementById("record").innerHTML += txt;
+    return txt
 }
 // Create "start", "pause" and "reset" functions
 
@@ -85,12 +84,12 @@ function pause() {
 }
 
 function reset() {
-    printLap(counter + " " + document.getElementById("timer").innerHTML + "<br>");
     str = document.getElementById("timer").innerHTML
     const timeArr = str.split(":");
-    printResult(timeArr[0], timeArr[1], timeArr[2], timeArr[3]);
+    time = "Final time: " + printResult(timeArr[0], timeArr[1], timeArr[2]) + "<br>";
+    printLap(time);
     clearInterval(timerInterval);
-    print("00:00:00");
+    print("00:00:00:00");
     elapsedTime = 0;
     showButton("PLAY");
 }
