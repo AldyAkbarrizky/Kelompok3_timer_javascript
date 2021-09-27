@@ -111,6 +111,10 @@ class Timer extends HTMLElement {
     }
 
     start() {
+        if(this.state == "stopped") {
+            this.counter = 1;
+            this.recordText.innerHTML = "Time <br/>";
+        }
         this.startTime = Date.now() - this.elapsedTime
         this.timerInterval = setInterval(() => {
             this.elapsedTime = Date.now() - this.startTime;
