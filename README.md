@@ -2,6 +2,7 @@
 ## _JTK Polban Mini Project_
 
 Stopwatch ini merupakan mini project mata kuliah Pengembangan Web semester 5 program studi D4 Teknik Informatika Politeknik Negeri Bandung. Dengan hanya menggunakan HTML, CSS, dan JS dengan pendekatan OOP, stopwatch ini menawarkan berbagai fitur yang menjadi daya tambah.
+Website ini dapat diakses secara online pada tautan [https://www.timer.argonautsoft.com/](https://www.timer.argonautsoft.com/)
 
 ## Fitur ✨
 Stopwatch ini memiliki beberapa fitur tambahan seperti
