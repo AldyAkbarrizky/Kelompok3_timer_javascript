@@ -27,6 +27,7 @@ let startTime;
 let elapsedTime = 0;
 let timerInterval;
 let counter = 1;
+let prevLap;
 
 // Create function to modify innerHTML
 
@@ -35,7 +36,7 @@ function print(txt) {
 }
 
 function printHeaderLap() {
-    counter = 1;
+    // counter = 1;
     header = "Time <br>";
     document.getElementById("record").innerHTML = header;
 }
@@ -69,8 +70,11 @@ function printResult(hour, minutes, seconds) {
 // Create "start", "pause" and "reset" functions
 
 function start() {
-    printHeaderLap();
     startTime = Date.now() - elapsedTime;
+    if (counter === 1) {
+        printHeaderLap();
+        prevLap = startTime;
+    }
     timerInterval = setInterval(function printTime() {
         elapsedTime = Date.now() - startTime;
         print(timeToString(elapsedTime));
@@ -84,10 +88,12 @@ function pause() {
 }
 
 function reset() {
+    currTime = startTime - elapsedTime;
+    lapTime = prevLap - currTime;
     str = document.getElementById("timer").innerHTML
     const timeArr = str.split(":");
-    time = "Final time: " + printResult(timeArr[0], timeArr[1], timeArr[2]) + "<br>";
-    printLap(time);
+    lap = "Final time: " + document.getElementById("timer").innerHTML + "<br>";
+    printLap(lap);
     clearInterval(timerInterval);
     print("00:00:00:00");
     elapsedTime = 0;
@@ -95,18 +101,20 @@ function reset() {
 }
 
 function lap() {
-    lap = counter + " " + document.getElementById("timer").innerHTML + "<br>";
+    currTime = startTime - elapsedTime;
+    lapTime = prevLap - currTime;
+    lap = counter + " " + document.getElementById("timer").innerHTML + " (+" + timeToString(lapTime) + ")<br>";
     printLap(lap);
+    prevLap = currTime;
     counter += 1;
 }
 
 // Create function to display buttons
 
 function showButton(buttonKey) {
-    const buttonToShow = buttonKey === "PLAY" ? playButton : pauseButton;
-    const buttonToHide = buttonKey === "PLAY" ? pauseButton : playButton;
-    buttonToShow.style.display = "inline-block";
-    buttonToHide.style.display = "none";
+    playButton.style.display = buttonKey === "PLAY" ? "inline-block" : "none";
+    pauseButton.style.display = buttonKey === "PLAY" ? "none" : "inline-block";
+    lapButton.disabled = buttonKey === "PLAY" ? true : false;
 }
 // Create event listeners
 
