@@ -37,7 +37,7 @@ function print(txt) {
 
 function printHeaderLap() {
     // counter = 1;
-    header = "Lap Time <br>";
+    header = "Time <br>";
     document.getElementById("record").innerHTML = header;
 }
 
@@ -45,6 +45,28 @@ function printLap(txt) {
     document.getElementById("record").innerHTML += txt;
 }
 
+function printResult(hour, minutes, seconds) {  
+    if (hour != "00") {
+        var hourTime = parseInt(hour);
+        if (hourTime >= 24) {
+            var day = hourTime / 24;
+            hourTime = hourTime - 24;
+            txt = day + " hari " + toString(hourTime) + " jam " + minutes + " menit " + seconds + " detik ";            
+        }
+        else {
+            txt = hour + " jam " + minutes + " menit " + seconds + " detik ";
+        }        
+    }
+    else if (minutes != "00")  {
+        txt = minutes + " menit " + seconds + " detik ";
+    }
+    else if (seconds != "00")  {
+        txt = seconds + " detik ";
+    } else {
+        txt = "0 detik"
+    }
+    return txt
+}
 // Create "start", "pause" and "reset" functions
 
 function start() {
@@ -68,6 +90,8 @@ function pause() {
 function reset() {
     currTime = startTime - elapsedTime;
     lapTime = prevLap - currTime;
+    str = document.getElementById("timer").innerHTML
+    const timeArr = str.split(":");
     lap = "Final time: " + document.getElementById("timer").innerHTML + "<br>";
     printLap(lap);
     clearInterval(timerInterval);
