@@ -6,7 +6,8 @@ body {
     margin: 0;
     padding: 0;
     background-color: #2c3347;
-    color: white; }
+    color: white;
+}
 
 .btn {
     padding: 10px 0;
@@ -20,47 +21,60 @@ body {
 
 .btn-blue {
     background-color: rgb(36, 113, 255);
-    color: white }
+    color: white
+}
 
 .btn-red {
     background-color: rgb(236, 56, 56);
-    color: white; }
+    color: white;
+}
 
 .btn-transparent {
     background-color: transparent;
     border: 1px solid white;
-    color: white; }
+    color: white;
+}
 
 .btn-transparent:hover {
     background-color: white;
-    color: #2c3347; }
+    color: #2c3347;
+}
 
 .text-white {
-    color: white; }
+    color: white;
+}
 
 .text-red {
-    color: rgb(236, 56, 56); }
+    color: rgb(236, 56, 56);
+}
 
 .text-center {
-    text-align: center; }
+    text-align: center;
+}
 
 .m-auto {
-    margin: auto; }
+    margin: auto;
+}
 
 .my-30 {
-    margin: 30px 0;}
+    margin: 30px 0;
+}
 
 .mx-5 {
-    margin: 0 5px; }
+    margin: 0 5px;
+}
 
 .w-50-cent {
-    width: 50%; }
+    width: 50%;
+}
 
 .w-100-v {
-    width: 100vw; }
+    width: 100vw;
+}
 
 .w-100-h {
-    height: 100vh; }
+    height: 100vh;
+}
 
 #stopwatch {
     border: 2px solid white;
@@ -69,7 +83,8 @@ body {
 }
 
 #container {
-    width: 680px; }
+    width: 680px;
+}
 
 #timer {
     font-family: "Roboto Mono", monospace;
@@ -88,6 +103,10 @@ body {
     #timer {
         font-size: 36px;
     }
+}
+
+#resume-btn {
+    display: none;
 }
 
 #pause-btn {

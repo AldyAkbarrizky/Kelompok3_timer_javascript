@@ -3,6 +3,7 @@ class Timer extends HTMLElement {
         super()
 
         this.playButton = document.getElementById("start-btn");
+        this.resumeButton = document.getElementById("resume-btn");
         this.pauseButton = document.getElementById("pause-btn");
         this.resetButton = document.getElementById("stop-btn");
         this.lapButton = document.getElementById("lap-btn");
@@ -10,6 +11,7 @@ class Timer extends HTMLElement {
         this.recordText = document.getElementById("record");
 
         this.playButton.onclick = () => this.start();
+        this.resumeButton.onclick = () => this.resume();
         this.pauseButton.onclick = () => this.pause();
         this.resetButton.onclick = () => this.reset();
         this.lapButton.onclick = () => this.lap();
@@ -130,6 +132,22 @@ class Timer extends HTMLElement {
         this.state = "started";
         this.pauseButton.style.display = "inline-block";
         this.playButton.style.display = "none";
+        this.resumeButton.style.display = "none";
+        this.lapButton.disabled = false;
+        this.resetButton.disabled = false;
+    }
+
+    resume() {
+        this.startTime = Date.now() - this.elapsedTime
+        this.timerInterval = setInterval(() => {
+            this.elapsedTime = Date.now() - this.startTime;
+            this.timerText.innerHTML = this.timeToString(this.elapsedTime);
+        }, 10);
+
+        this.state = "started";
+        this.pauseButton.style.display = "inline-block";
+        this.playButton.style.display = "none";
+        this.resumeButton.style.display = "none";
         this.lapButton.disabled = false;
         this.resetButton.disabled = false;
     }
@@ -138,8 +156,9 @@ class Timer extends HTMLElement {
         clearInterval(this.timerInterval);
 
         this.state = "paused";
+        this.playButton.style.display = "none";
         this.pauseButton.style.display = "none";
-        this.playButton.style.display = "inline-block";
+        this.resumeButton.style.display = "inline-block";
         this.lapButton.disabled = true;
     }
 
@@ -155,6 +174,7 @@ class Timer extends HTMLElement {
 
         this.state = "stopped";
         this.pauseButton.style.display = "none";
+        this.resumeButton.style.display = "none";
         this.playButton.style.display = "inline-block";
         this.lapButton.disabled = true;
         this.resetButton.disabled = true;
