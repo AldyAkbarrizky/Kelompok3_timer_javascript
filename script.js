@@ -147,6 +147,7 @@ class Timer extends HTMLElement {
         const str = this.timerText.innerHTML;
         const timeArr = str.split(":");
         const final_time = "Final time: " + this.printResult(timeArr[0], timeArr[1], timeArr[2]) + "<br>";
+        this.lap();
         this.recordText.innerHTML += final_time
         clearInterval(this.timerInterval);
         this.timerText.innerHTML = "00:00:00:00";
@@ -168,7 +169,7 @@ class Timer extends HTMLElement {
         } else {
             lapTime = this.prevLap - currTime;
         }
-        const lap_time = this.counter + " " + this.timerText.innerHTML + " (+" + this.timeToString(lapTime) + ")<br>";
+        const lap_time = " Lap " + this.counter + ". " + this.timerText.innerHTML + " (+" + this.timeToString(lapTime) + ")<br>";
         this.recordText.innerHTML += lap_time;
         this.prevLap = currTime;
         this.counter += 1;
