@@ -30,6 +30,8 @@ class Timer extends HTMLElement {
     save(event) {
         event.preventDefault();
 
+        if (this.state === "stopped") return;
+
         localStorage.setItem("saveData", JSON.stringify({
             state: this.state,
             savedTime: this.elapsedTime,
@@ -44,10 +46,11 @@ class Timer extends HTMLElement {
 
     load() {
         const loadData = JSON.parse(localStorage.getItem("saveData"));
+        localStorage.removeItem("saveData"); 
         if(loadData === null) return;
 
         this.elapsedTime = loadData.savedTime;
-        
+
         switch(loadData.state) {
             case "started":
                 this.elapsedTime += (Date.now() - loadData.timeClosed);
@@ -63,10 +66,6 @@ class Timer extends HTMLElement {
                 this.counter=loadData.counter;
                 this.prevLap=loadData.prevLap;
                 this.pause();
-                break
-            case "stopped":
-                this.timerText.innerHTML = this.timeToString(this.elapsedTime);
-                this.recordText.innerHTML = "Time <br/>";
                 break
         }
     }
