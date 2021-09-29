@@ -34,7 +34,9 @@ class Timer extends HTMLElement {
             state: this.state,
             savedTime: this.elapsedTime,
             record: this.recordText.innerHTML,
-            timeClosed: Date.now()
+            timeClosed: Date.now(),
+            counter: this.counter,
+            prevLap: this.prevLap
         }));
 
         return;
@@ -51,11 +53,15 @@ class Timer extends HTMLElement {
                 this.elapsedTime += (Date.now() - loadData.timeClosed);
                 this.timerText.innerHTML = this.timeToString(this.elapsedTime);
                 this.recordText.innerHTML = loadData.record;
+                this.counter=loadData.counter;
+                this.prevLap=loadData.prevLap;
                 this.start();
                 break
             case "paused":
                 this.timerText.innerHTML = this.timeToString(this.elapsedTime);
                 this.recordText.innerHTML = loadData.record;
+                this.counter=loadData.counter;
+                this.prevLap=loadData.prevLap;
                 this.pause();
                 break
             case "stopped":
@@ -154,6 +160,7 @@ class Timer extends HTMLElement {
     }
 
     lap() {
+        
         const currTime = this.startTime - this.elapsedTime;
         let lapTime = "";
         if(this.counter == 1) {
