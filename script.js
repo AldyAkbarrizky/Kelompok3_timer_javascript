@@ -88,6 +88,7 @@ class Timer extends HTMLElement {
                     this.recordText.innerHTML = loadData.record;
                     this.counter=loadData.counter;
                     this.prevLap=loadData.prevLap;
+                    this.state= loadData.state;
                     this.start();
                     break
                 case "paused":
@@ -95,6 +96,7 @@ class Timer extends HTMLElement {
                     this.recordText.innerHTML = loadData.record;
                     this.counter=loadData.counter;
                     this.prevLap=loadData.prevLap;
+                    this.state= loadData.state;
                     this.pause();
                     break
                 case "stopped":
