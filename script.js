@@ -1,14 +1,37 @@
 class Timer extends HTMLElement {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
 
-        this.playButton = document.getElementById("start-btn");
-        this.resumeButton = document.getElementById("resume-btn");
-        this.pauseButton = document.getElementById("pause-btn");
-        this.resetButton = document.getElementById("stop-btn");
-        this.lapButton = document.getElementById("lap-btn");
-        this.timerText = document.getElementById("timer");
-        this.recordText = document.getElementById("record");
+        console.log(props);
+
+        this.attachShadow({ mode: "open" })
+
+        this.shadowRoot.innerHTML = `
+            <slot></slot>
+            <div class="timer-container text-center w-33-cent" part="timer-container">
+                <div class="stopwatch w-50-cent m-auto" part="stopwatch">
+                    <span id="timer" part="timer">00:00:00:00</span>
+                </div>
+                <div id="button-container" class="my-30">
+                    <button id="start-btn" class="btn btn-transparent text-white mx-5" part="button">Start</button>
+                    <button id="resume-btn" class="btn btn-transparent text-white mx-5" hidden part="button">Resume</button>
+                    <button id="pause-btn" class="btn btn-transparent text-white mx-5" hidden part="button">Pause</button>
+                    <button id="stop-btn" class="btn btn-transparent text-white mx-5" part="button">Stop</button>
+                    <button id="lap-btn" class="btn btn-transparent text-white mx-5" disabled part="button">Lap</button>
+                </div>
+                <div part="my-30">
+                    <span id="record" part="record-text">Time <br></span>
+                </div>
+            </div>
+        `
+
+        this.playButton = this.shadowRoot.getElementById("start-btn");
+        this.resumeButton = this.shadowRoot.getElementById("resume-btn");
+        this.pauseButton = this.shadowRoot.getElementById("pause-btn");
+        this.resetButton = this.shadowRoot.getElementById("stop-btn");
+        this.lapButton = this.shadowRoot.getElementById("lap-btn");
+        this.timerText = this.shadowRoot.getElementById("timer");
+        this.recordText = this.shadowRoot.getElementById("record");
 
         this.playButton.onclick = () => this.start();
         this.resumeButton.onclick = () => this.resume();
@@ -16,14 +39,15 @@ class Timer extends HTMLElement {
         this.resetButton.onclick = () => this.reset();
         this.lapButton.onclick = () => this.lap();
 
+        this.timerID = props.id;
         this.startTime;
         this.elapsedTime = 0;
         this.timerInterval;
         this.counter = 1;
         this.prevLap;
-        this.state = "paused";
+        this.state = "stopped";
 
-        console.log(localStorage.getItem("saveData"));
+        console.log(localStorage.getItem("saveData-" + props.id));
 
         window.addEventListener("beforeunload", (event) => this.save(event));
         this.load();
@@ -32,7 +56,7 @@ class Timer extends HTMLElement {
     save(event) {
         event.preventDefault();
 
-        localStorage.setItem("saveData", JSON.stringify({
+        localStorage.setItem("saveData-" + this.timerID, JSON.stringify({
             state: this.state,
             savedTime: this.elapsedTime,
             record: this.recordText.innerHTML,
@@ -45,31 +69,39 @@ class Timer extends HTMLElement {
     }
 
     load() {
-        const loadData = JSON.parse(localStorage.getItem("saveData"));
-        if(loadData === null) return;
+        // var tot_timer = parseInt(localStorage.getItem("tot_timer"));
+        // if(tot_timer === null) {
+        //     tot_timer = 0;
+        //     localStorage.setItem("tot_timer", tot_timer);
+        // }
 
-        this.elapsedTime = loadData.savedTime;
-        
-        switch(loadData.state) {
-            case "started":
-                this.elapsedTime += (Date.now() - loadData.timeClosed);
-                this.timerText.innerHTML = this.timeToString(this.elapsedTime);
-                this.recordText.innerHTML = loadData.record;
-                this.counter=loadData.counter;
-                this.prevLap=loadData.prevLap;
-                this.start();
-                break
-            case "paused":
-                this.timerText.innerHTML = this.timeToString(this.elapsedTime);
-                this.recordText.innerHTML = loadData.record;
-                this.counter=loadData.counter;
-                this.prevLap=loadData.prevLap;
-                this.pause();
-                break
-            case "stopped":
-                this.timerText.innerHTML = this.timeToString(this.elapsedTime);
-                this.recordText.innerHTML = "Time <br/>";
-                break
+        if(this.timerID) {
+            const loadData = JSON.parse(localStorage.getItem("saveData-" + this.timerID));
+            if(!loadData) return;
+
+            this.elapsedTime = loadData.savedTime;
+            
+            switch(loadData.state) {
+                case "started":
+                    this.elapsedTime += (Date.now() - loadData.timeClosed);
+                    this.timerText.innerHTML = this.timeToString(this.elapsedTime);
+                    this.recordText.innerHTML = loadData.record;
+                    this.counter=loadData.counter;
+                    this.prevLap=loadData.prevLap;
+                    this.start();
+                    break
+                case "paused":
+                    this.timerText.innerHTML = this.timeToString(this.elapsedTime);
+                    this.recordText.innerHTML = loadData.record;
+                    this.counter=loadData.counter;
+                    this.prevLap=loadData.prevLap;
+                    this.pause();
+                    break
+                case "stopped":
+                    this.timerText.innerHTML = this.timeToString(this.elapsedTime);
+                    this.recordText.innerHTML = "Time <br/>";
+                    break
+            }
         }
     }
 
@@ -130,9 +162,9 @@ class Timer extends HTMLElement {
         }, 10);
 
         this.state = "started";
-        this.pauseButton.style.display = "inline-block";
-        this.playButton.style.display = "none";
-        this.resumeButton.style.display = "none";
+        this.pauseButton.hidden = false;
+        this.playButton.hidden = true;
+        this.resumeButton.hidden = true;
         this.lapButton.disabled = false;
         this.resetButton.disabled = false;
     }
@@ -145,9 +177,9 @@ class Timer extends HTMLElement {
         }, 10);
 
         this.state = "started";
-        this.pauseButton.style.display = "inline-block";
-        this.playButton.style.display = "none";
-        this.resumeButton.style.display = "none";
+        this.pauseButton.hidden = false;
+        this.playButton.hidden = true;
+        this.resumeButton.hidden = true;
         this.lapButton.disabled = false;
         this.resetButton.disabled = false;
     }
@@ -156,9 +188,9 @@ class Timer extends HTMLElement {
         clearInterval(this.timerInterval);
 
         this.state = "paused";
-        this.playButton.style.display = "none";
-        this.pauseButton.style.display = "none";
-        this.resumeButton.style.display = "inline-block";
+        this.playButton.hidden = true;
+        this.pauseButton.hidden = true;
+        this.resumeButton.hidden = false;
         this.lapButton.disabled = true;
     }
 
@@ -178,6 +210,7 @@ class Timer extends HTMLElement {
         this.playButton.style.display = "inline-block";
         this.lapButton.disabled = true;
         this.resetButton.disabled = true;
+        localStorage.removeItem("savedata-" + this.timerID);
     }
 
     lap() {
@@ -194,6 +227,18 @@ class Timer extends HTMLElement {
         this.prevLap = currTime;
         this.counter += 1;
     }
+}
+
+function addNewTimer() {
+    var tot_timer = parseInt(localStorage.getItem("tot_timer"));
+    var timer = new Timer({id: 'timer-' + tot_timer});
+    timer.setAttribute('id', 'timer-' + tot_timer);
+    document.getElementById('main-cont').appendChild(timer);
+    localStorage.setItem("tot_timer", tot_timer + 1);
+}
+
+function resetAllTimer() {
+    localStorage.clear();
 }
 
 window.customElements.define("the-timer", Timer)
